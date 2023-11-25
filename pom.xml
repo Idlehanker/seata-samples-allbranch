@@ -280,6 +280,14 @@
 
     <repositories>
         <repository>
+            <id>aliyun</id>
+            <name>aliyun Repository</name>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>mvnrepository</id>
             <name>mvnrepository</name>
             <url>https://www.mvnrepository.com/</url>
@@ -383,6 +391,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
@@ -411,6 +420,7 @@
                     </mapping>
                 </configuration>
             </plugin>
+            -->
         </plugins>
     </build>
 
