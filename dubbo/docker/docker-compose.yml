@@ -14,6 +14,7 @@ services:
       - admin.metadata-report.address=zookeeper://zookeeper:2181
       - admin.root.user.name=dubbo
       - admin.root.user.password=dubbo
+      - TZ=Asia/Shanghai
     networks:
       - dubbo-net
     depends_on:
@@ -23,6 +24,8 @@ services:
   zookeeper:
     image: zookeeper:3.8.3-jre-11
     container_name: zookeeper
+    environment:
+      TZ: "Asia/Shanghai"
     ports:
       - "2181:2181"
       - "2888:2888"
@@ -39,12 +42,37 @@ services:
       MYSQL_DATABASE: seata
       MYSQL_USER: dev
       MYSQL_PASSWORD: dev1234
+      TZ: "Asia/Shanghai"
     ports:
       - "3306:3306"
     volumes:
       - ../src/main/resources/sql:/docker-entrypoint-initdb.d
     networks:
       - dubbo-net
+    depends_on:
+      - dubbo-admin
+
+  # seata server
+  # docker pull seataio/seata-server:2.0.0.jre17-slim
+  seata-server:
+    #image: hellowoodes/seata:0.9.0-file
+    #image: seataio/seata-server:1.8.0
+    image: seataio/seata-server:1.5.2
+    container_name: seata-server
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+    environment:
+      - SEATA_PORT=8091
+      - STORE_MODE=file
+      - TZ=Asia/Shanghai
+    expose:
+      - 8091
+      - 7091
+    networks:
+      - dubbo-net
+    depends_on:
+      - mysql
 
 # shared network
 networks:
