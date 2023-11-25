@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  dubbo-admin:
+    image: apache/dubbo-admin:0.6.0
+    container_name: dubbo-admin
+    ports:
+      - "38080:38080"
+      - "30880:30880"
+      - "32222:32222"
+    environment:
+      - admin.registry.address=zookeeper://zookeeper:2181
+      - admin.config-center=zookeeper://zookeeper:2181
+      - admin.metadata-report.address=zookeeper://zookeeper:2181
+      - admin.root.user.name=dubbo
+      - admin.root.user.password=dubbo
+    networks:
+      - dubbo-net
+    #volumes:
+    #  - ./dubbo-admin.conf:/config
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: zookeeper:3.8.3-jre-11
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    networks:
+      - dubbo-net
+
+networks:
+  dubbo-net:
+    name: dubbo-net
+    driver: bridge
